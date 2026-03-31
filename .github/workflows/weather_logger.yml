@@ -24,7 +24,7 @@ jobs:
       - name: 執行爬蟲腳本
         env:
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
-        run: python main.py
+        run: python git_main.py
 
       - name: 將更新後的 CSV 提交回 GitHub
         run: |
