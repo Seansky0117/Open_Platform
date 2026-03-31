@@ -2,9 +2,8 @@ name: Daily Weather Logger
 
 on:
   schedule:
-    # 每天凌晨 0 點執行 (UTC 時間，台灣時間是 08:00)
-    - cron: '0 ,30 * * *'
-  workflow_dispatch: # 允許手動觸發
+    - cron: '0,30 * * * *'  # 這是每 30 分鐘執行一次的正確格式
+  workflow_dispatch:
 
 jobs:
   build:
