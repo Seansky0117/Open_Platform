@@ -1,0 +1,36 @@
+name: Daily Weather Logger
+
+on:
+  schedule:
+    # 每天凌晨 0 點執行 (UTC 時間，台灣時間是 08:00)
+    - cron: '0 ,30 * * *'
+  workflow_dispatch: # 允許手動觸發
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 檢出儲存庫代碼
+        uses: actions/checkout@v3
+
+      - name: 設定 Python 環境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: 安裝套件
+        run: |
+          pip install requests pandas
+
+      - name: 執行爬蟲腳本
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+        run: python main.py
+
+      - name: 將更新後的 CSV 提交回 GitHub
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add human_readable_weather.csv
+          git commit -m "自動更新天氣數據: $(date)" || echo "沒有新數據可提交"
+          git push
